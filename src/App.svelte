@@ -191,7 +191,10 @@
 			>
 			<FaqItem question="How to contribute to this project?"
 				><p slot="answer">
-					Checkout this <a href="/#/" class="underline">Repository</a>
+					Checkout this <a
+						href="https://github.com/shakyapeiris/Feed-The-Snake"
+						class="underline">Repository</a
+					>
 				</p></FaqItem
 			>
 			<FaqItem question="Who developed this?"
