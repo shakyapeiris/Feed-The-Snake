@@ -1,3 +1,5 @@
+![Screen shot of the gameplat](/public/Screenshot%20from%202022-10-24%2022-58-33.png "Feed the snake gameplay") .
+
 # Svelte + TS + Vite
 
 This template should help get you started developing with Svelte and TypeScript in Vite.
