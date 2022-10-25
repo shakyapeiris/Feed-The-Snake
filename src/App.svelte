@@ -185,7 +185,7 @@
 	<section
 		class="w-full lg:w-[70%] min-h-full flex items-center justify-between lg:justify-evenly flex-col p-[25px]"
 	>
-		<div class="w-full flex items-start justify-between">
+		<div class="w-full flex items-start justify-between lg:hidden">
 			<button
 				on:click={() => {
 					isAbout = true;
