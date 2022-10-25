@@ -7,6 +7,7 @@
 	import BsPauseFill from 'svelte-icons-pack/bs/BsPauseFill';
 	import AiFillInfoCircle from 'svelte-icons-pack/ai/AiFillInfoCircle';
 	import { fade, scale } from 'svelte/transition';
+	import { swipe } from 'svelte-gestures';
 	import { onMount } from 'svelte';
 
 	let playingStatus: string = 'Stop'; // Stop || Play || End
@@ -183,6 +184,25 @@
 
 	<div class="hidden lg:block w-[30%] h-full"><About /></div>
 	<section
+		use:swipe={{ timeframe: 300, minSwipeDistance: 60 }}
+		on:swipe={(e) => {
+			if (isPlaying) {
+				switch (e.detail.direction) {
+					case 'top':
+						if (currDirn != 'YD') currDirn = 'YU';
+						break;
+					case 'bottom':
+						if (currDirn != 'YU') currDirn = 'YD';
+						break;
+					case 'right':
+						if (currDirn != 'XL') currDirn = 'XR';
+						break;
+					case 'left':
+						if (currDirn != 'XR') currDirn = 'XL';
+						break;
+				}
+			}
+		}}
 		class="w-full lg:w-[70%] min-h-full flex items-center justify-between lg:justify-evenly flex-col p-[25px]"
 	>
 		<div class="w-full flex items-start justify-between lg:hidden">
