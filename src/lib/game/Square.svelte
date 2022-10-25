@@ -3,7 +3,7 @@
 </script>
 
 <div
-	class={`w-[22px] h-[22px] mr-[1px] last:mr-0  ${
+	class={`w-[5%] md:w-[25px] aspect-square mr-[1px] last:mr-0  ${
 		object == 'A' ? 'bg-red-500' : object == 'S' ? 'bg-green-400' : ''
 	}`}
 />

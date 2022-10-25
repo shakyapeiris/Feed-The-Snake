@@ -1,18 +1,13 @@
 <script lang="ts">
 	import Game from './lib/Game.svelte';
+	import About from './lib/About.svelte';
 	import Icon from 'svelte-icons-pack/Icon.svelte';
 	import AiOutlineReload from 'svelte-icons-pack/ai/AiOutlineReload';
-	import BsVolumeUpFill from 'svelte-icons-pack/bs/BsVolumeUpFill';
-	import BsFillVolumeMuteFill from 'svelte-icons-pack/bs/BsVolumeMuteFill';
 	import BsPlayFill from 'svelte-icons-pack/bs/BsPlayFill';
 	import BsPauseFill from 'svelte-icons-pack/bs/BsPauseFill';
-	import BsFacebook from 'svelte-icons-pack/bs/BsFacebook';
-	import BsInstagram from 'svelte-icons-pack/bs/BsInstagram';
-	import BsLinkedin from 'svelte-icons-pack/bs/BsLinkedin';
-	import BsTwitter from 'svelte-icons-pack/bs/BsTwitter';
-	import BsGithub from 'svelte-icons-pack/bs/BsGithub';
+	import AiFillInfoCircle from 'svelte-icons-pack/ai/AiFillInfoCircle';
+	import { fade, scale } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import FaqItem from './lib/FAQItem.svelte';
 
 	let playingStatus: string = 'Stop'; // Stop || Play || End
 	$: isPlaying = playingStatus == 'Play';
@@ -162,91 +157,44 @@
 		}
 	};
 
+	let isAbout = false;
 	onMount(() => {
 		apple = getAppleCoordinates();
 		drawSnake();
 		play();
+		isAbout = true;
 	});
 </script>
 
 <main class="w-full flex items-start justify-between h-[100vh] font-Trispace">
+	{#if isAbout}
+		<div
+			in:fade
+			out:fade
+			class="w-full absolute top-0 bg-[#8AC2F5] bg-opacity-40 left-0 min-h-full p-[15px] backdrop-blur-md flex items-center justify-center lg:hidden"
+		>
+			<About
+				on:click={() => {
+					isAbout = false;
+				}}
+			/>
+		</div>
+	{/if}
+
+	<div class="hidden lg:block w-[30%] h-full"><About /></div>
 	<section
-		class="w-[30%] py-[15px] min-h-full bg-gradient-to-t from-[#006BA7] to-[#A4F6F2] text-white flex items-start justify-evenly flex-col"
+		class="w-full lg:w-[70%] min-h-full flex items-center justify-between lg:justify-evenly flex-col p-[25px]"
 	>
-		<!-- <img class="h-[200px] w-auto" src={Narrator} alt="narrator-img" /> -->
-		<div class="p-[15px]">
-			<h2 class="font-bold text-4xl mb-[5px] w-full">Hey!</h2>
-			<p class="text-md font-light">
-				Your loving snake is starving! Help her to locate the food or
-				she will locate you 😉
-			</p>
+		<div class="w-full flex items-start justify-between">
+			<button
+				on:click={() => {
+					isAbout = true;
+				}}
+			>
+				<Icon src={AiFillInfoCircle} size="1.8rem" color="#8AC2F5" />
+			</button>
+			<div />
 		</div>
-		<div class="w-full p-[15px]">
-			<h2 class="font-bold text-4xl mb-[5px] w-full">FAQ</h2>
-			<FaqItem question="How to play the game?"
-				><p slot="answer">
-					Press the play button and navigate the snake towards apples
-					using arrow keys
-				</p></FaqItem
-			>
-			<FaqItem question="How to contribute to this project?"
-				><p slot="answer">
-					Checkout this <a
-						href="https://github.com/shakyapeiris/Feed-The-Snake"
-						class="underline">Repository</a
-					>
-				</p></FaqItem
-			>
-			<FaqItem question="Who developed this?"
-				><p slot="answer">
-					Hi I'm Shakya Peiris. I'm currently studying at Ananda
-					College, Colombo 10
-				</p></FaqItem
-			>
-			<FaqItem question="I lost my snake! What should I do now?"
-				><p slot="answer">Ummm...</p></FaqItem
-			>
-		</div>
-		<div class="p-[15px] w-full">
-			<h2 class="font-bold text-4xl mb-[5px] w-full">Contact</h2>
-			<p
-				class="text-md font-light flex items-center justify-between w-max mb-[15px]"
-			>
-				<a
-					href="https://github.com/shakyapeiris"
-					class="cursor-pointer mr-[20px]"
-					target="_blank"
-					rel="noreferrer"><Icon src={BsGithub} size="1.6rem" /></a
-				>
-				<a
-					href="https://www.linkedin.com/in/shakyapeiris/"
-					class="cursor-pointer mr-[20px]"
-					target="_blank"
-					rel="noreferrer"><Icon src={BsLinkedin} size="1.6rem" /></a
-				>
-				<a
-					href="https://twitter.com/Shakya55007271"
-					class="cursor-pointer mr-[20px]"
-					target="_blank"
-					rel="noreferrer"><Icon src={BsTwitter} size="1.6rem" /></a
-				>
-			</p>
-			<a
-				href="https://www.buymeacoffee.com/thep33ra"
-				target="_blank"
-				rel="noreferrer"
-				class="w-max"
-				><img
-					src="https://helloimjessa.files.wordpress.com/2021/06/bmc-button.png"
-					alt="buymeacoffee"
-					class="h-[40px] w-auto"
-				/></a
-			>
-		</div>
-	</section>
-	<section
-		class="w-[70%] h-full flex items-center justify-evenly flex-col px-[25px]"
-	>
 		<!-- <div
 			class="w-full flex items-start justify-between cursor-pointer h-[30px]"
 		>
@@ -262,11 +210,11 @@
 				{/if}
 			</button>
 		</div> -->
-		<h1 class="font-bold text-4xl">Feed The Snake</h1>
+		<h1 class="font-bold text-4xl w-full text-center">Feed The Snake</h1>
 		<Game {highestScore} {score} {board} />
 		<button
 			on:click={togglePlayingStatus}
-			class="bg-[#8AC2F5] hover:bg-[#45a4fc] transition-colors outline-none w-[50px] h-[50px] rounded-full text-3xl cursor-pointer text-white flex items-center justify-center"
+			class="bg-[#8AC2F5] hover:bg-[#45a4fc] mt-[5px] transition-colors outline-none w-[50px] h-[50px] rounded-full text-3xl cursor-pointer text-white flex items-center justify-center"
 		>
 			{#if playingStatus == 'Play'}
 				<Icon src={BsPauseFill} />

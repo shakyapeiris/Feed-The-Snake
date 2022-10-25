@@ -5,15 +5,15 @@
 	export let board: any;
 </script>
 
-<div class="w-max">
-	<div class="w-full flex items-center justify-between">
+<div class="w-full md:w-max">
+	<div class="w-full flex items-center justify-between text-xs sm:text-base">
 		<span>Score: {score}</span>
 		<span>Highest Score: {highestScore}</span>
 	</div>
-	<div class="w-max border-2 border-solid border-black">
+	<div class="w-full md:w-max border-2 border-solid border-black">
 		{#each board as row}
 			<div
-				class="flex items-center mb-[1px] last:mb-0 justify-between w-max"
+				class="flex items-center mb-[1px] last:mb-0 justify-between w-full md:w-max"
 			>
 				{#each row as square}
 					<Square object={square} />
