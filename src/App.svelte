@@ -6,6 +6,8 @@
 	import BsPlayFill from 'svelte-icons-pack/bs/BsPlayFill';
 	import BsPauseFill from 'svelte-icons-pack/bs/BsPauseFill';
 	import AiFillInfoCircle from 'svelte-icons-pack/ai/AiFillInfoCircle';
+	import HintIcon from 'svelte-icons-pack/ai/AiOutlineBulb';
+	import { getBestPath } from './utils/helpers';
 	import { fade, scale } from 'svelte/transition';
 	import { swipe } from 'svelte-gestures';
 	import { onMount } from 'svelte';
@@ -21,9 +23,11 @@
 	let snake = [[5, 5]];
 	let currDirn: string = 'YD'; // YD, YU, XL, XR
 	let apple: null | Array<number> = null;
+	let hints = [];
 
 	let highestScore = localStorage.getItem('hs') || 0;
 	let score = 0;
+	let showHints = false;
 
 	// Draw the snake and apple
 	const drawSnake = () => {
@@ -34,6 +38,12 @@
 		snake.forEach(([x, y]) => {
 			board[y][x] = 'S';
 		});
+
+		if (showHints) {
+			hints.forEach(([x, y]) => {
+				board[y][x] = 'H';
+			});
+		}
 
 		if (apple) {
 			board[apple[1]][apple[0]] = 'A';
@@ -110,6 +120,14 @@
 			if (score > highestScore) {
 				highestScore = score;
 			}
+
+			if (apple) {
+				hints = getBestPath(
+					[snake[0][0], snake[0][1]],
+					apple,
+					currDirn
+				);
+			}
 			drawSnake();
 		}
 
@@ -175,17 +193,17 @@
 			class="w-full absolute top-0 bg-[#8AC2F5] bg-opacity-40 left-0 min-h-full p-[15px] backdrop-blur-md flex items-center justify-center lg:hidden"
 		>
 			<About
-				on:click={() => {
+				on:click="{() => {
 					isAbout = false;
-				}}
+				}}"
 			/>
 		</div>
 	{/if}
 
 	<div class="hidden lg:block w-[30%] h-full"><About /></div>
 	<section
-		use:swipe={{ timeframe: 300, minSwipeDistance: 60 }}
-		on:swipe={(e) => {
+		use:swipe="{{ timeframe: 300, minSwipeDistance: 60 }}"
+		on:swipe="{(e) => {
 			if (isPlaying) {
 				switch (e.detail.direction) {
 					case 'top':
@@ -202,18 +220,18 @@
 						break;
 				}
 			}
-		}}
+		}}"
 		class="w-full lg:w-[70%] min-h-full flex items-center justify-between lg:justify-evenly flex-col p-[25px]"
 	>
 		<div class="w-full flex items-start justify-between lg:hidden">
 			<button
-				on:click={() => {
+				on:click="{() => {
 					isAbout = true;
-				}}
+				}}"
 			>
-				<Icon src={AiFillInfoCircle} size="1.8rem" color="#8AC2F5" />
+				<Icon src="{AiFillInfoCircle}" size="1.8rem" color="#8AC2F5" />
 			</button>
-			<div />
+			<div></div>
 		</div>
 		<!-- <div
 			class="w-full flex items-start justify-between cursor-pointer h-[30px]"
@@ -231,20 +249,30 @@
 			</button>
 		</div> -->
 		<h1 class="font-bold text-4xl w-full text-center">Feed The Snake</h1>
-		<Game {highestScore} {score} {board} />
-		<button
-			on:click={togglePlayingStatus}
-			class="bg-[#8AC2F5] hover:bg-[#45a4fc] mt-[5px] transition-colors outline-none w-[50px] h-[50px] rounded-full text-3xl cursor-pointer text-white flex items-center justify-center"
-		>
-			{#if playingStatus == 'Play'}
-				<Icon src={BsPauseFill} />
-			{:else if playingStatus == 'Stop'}
-				<Icon src={BsPlayFill} />
-			{:else}
-				<Icon src={AiOutlineReload} color="white" />
-			{/if}
-		</button>
+		<Game highestScore="{highestScore}" score="{score}" board="{board}" />
+		<div class="flex items-center justify-center w-max">
+			<button
+				on:click="{togglePlayingStatus}"
+				class="mr-2 bg-[#8AC2F5] hover:bg-[#45a4fc] mt-[5px] transition-colors outline-none w-[50px] h-[50px] rounded-full text-3xl cursor-pointer text-white flex items-center justify-center"
+			>
+				{#if playingStatus == 'Play'}
+					<Icon src="{BsPauseFill}" />
+				{:else if playingStatus == 'Stop'}
+					<Icon src="{BsPlayFill}" />
+				{:else}
+					<Icon src="{AiOutlineReload}" color="white" />
+				{/if}
+			</button>
+			<button
+				on:click="{() => {
+					showHints = !showHints;
+				}}"
+				class="bg-[#8AC2F5] hover:bg-[#45a4fc] mt-[5px] transition-colors outline-none w-[50px] h-[50px] rounded-full text-3xl cursor-pointer text-white flex items-center justify-center"
+			>
+				<Icon src="{HintIcon}" color="white" />
+			</button>
+		</div>
 	</section>
 </main>
 
-<svelte:window on:keydown|preventDefault={onKeyDown} />
+<svelte:window on:keydown|preventDefault="{onKeyDown}" />
