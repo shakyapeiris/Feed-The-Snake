@@ -143,6 +143,111 @@ export const getBestPath = (currCoordinates, targetCoordinates, dirn) => {
         if (i == 20) i = 0;
         yVisited = (i == y);
     }
+
+    yVisited = false;
+    i = y, j = x;
+
+    while (!yVisited) {
+        j = x;
+        let xVisited = false;
+        while (!xVisited) {
+
+            if (grid[i][j].paths != null && grid[i][j].snake != null) {
+                // Up
+                if (grid[i][j].dirn != "YD") {
+                    let tempY
+
+                    if (i == 0) {
+                        tempY = 19;
+                    }
+                    else {
+                        tempY = i - 1;
+                    }
+
+
+
+                    if (grid[tempY][j].paths == null || (grid[tempY][j].paths.length > (grid[i][j].paths.length + 1) && isValidMove([j, tempY], grid[i][j].snake))) {
+                        grid[tempY][j] = {
+                            paths: [...grid[i][j].paths, [j, tempY]],
+                            dirn: 'YU',
+                            snake: moveSnake([j, tempY], grid[i][j].snake)
+                        }
+                    }
+
+                }
+
+                // Down
+                if (grid[i][j].dirn != "YU") {
+                    let tempY
+
+                    if (i == 19) {
+                        tempY = 0;
+                    }
+                    else {
+                        tempY = i + 1;
+                    }
+
+                    if (grid[tempY][j].paths == null || (grid[tempY][j].paths.length > (grid[i][j].paths.length + 1) && isValidMove([j, tempY], grid[i][j].snake))) {
+                        grid[tempY][j] = {
+                            paths: [...grid[i][j].paths, [j, tempY]],
+                            dirn: 'YD',
+                            snake: moveSnake([j, tempY], grid[i][j].snake)
+                        }
+                    }
+                }
+
+                // Left
+                if (grid[i][j].dirn != "XR") {
+                    let tempX
+
+                    if (j == 0) {
+                        tempX = 19;
+                    }
+                    else {
+                        tempX = j - 1;
+                    }
+
+                    if (grid[i][tempX].paths == null || (grid[i][tempX].paths.length > (grid[i][j].paths.length + 1) && isValidMove([tempX, i], grid[i][j].snake))) {
+                        grid[i][tempX] = {
+                            paths: [...grid[i][j].paths, [tempX, i]],
+                            dirn: 'XL',
+                            snake: moveSnake([tempX, i], grid[i][j].snake)
+                        }
+                    }
+                }
+
+                // Right
+                if (grid[i][j].dirn != "XL") {
+                    let tempX
+
+                    if (j == 19) {
+                        tempX = 0;
+                    }
+                    else {
+                        tempX = j + 1;
+                    }
+
+                    if (grid[i][tempX].paths == null || (grid[i][tempX].paths.length > (grid[i][j].paths.length + 1) && isValidMove([tempX, i], grid[i][j].snake))) {
+                        grid[i][tempX] = {
+                            paths: [...grid[i][j].paths, [tempX, i]],
+                            dirn: 'XR',
+                            snake: moveSnake([tempX, i], grid[i][j].snake)
+                        }
+                    }
+                }
+            }
+            // Down
+
+
+            j--;
+            if (j == -1) j = 19;
+            xVisited = (x == j);
+        }
+
+        i--;
+        if (i == -1) i = 19;
+        yVisited = (i == y);
+    }
     console.log('Done...')
     return grid[targetCoordinates[1]][targetCoordinates[0]].paths;
 }
