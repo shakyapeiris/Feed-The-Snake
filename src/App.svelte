@@ -160,15 +160,26 @@
 				case 'ArrowUp':
 					if (currDirn != 'YD') currDirn = 'YU';
 					break;
+				case 'w':
+					if (currDirn != 'YD') currDirn = 'YU';
+					break;
 				case 'ArrowDown':
+					if (currDirn != 'YU') currDirn = 'YD';
+					break;
+				case 's':
 					if (currDirn != 'YU') currDirn = 'YD';
 					break;
 				case 'ArrowRight':
 					if (currDirn != 'XL') currDirn = 'XR';
 					break;
+				case 'd':
+					if (currDirn != 'XL') currDirn = 'XR';
+					break;
 				case 'ArrowLeft':
 					if (currDirn != 'XR') currDirn = 'XL';
 					break;
+				case 'a':
+					if (currDirn != 'XR') currDirn = 'XL';
 			}
 		}
 		if (e.code == 'Space') {
